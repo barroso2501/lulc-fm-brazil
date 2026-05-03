@@ -65,12 +65,14 @@ T = 6  (mosaic/transition — class 21, treated as intermediate)
 
 ### Group 3 — Stability
 
-**`estavel` — Stable**
-- Definition: pixel remains in the same class (N, P, A, U, or W) for ≥21 years
-- Threshold: 21 years = more than half of the 40-year series
-- Ecological meaning: structurally consolidated land use — resistant to transitions
-- Class T (mosaic) does not count toward stability
-- Mean frequency: 94.1% of pixels across all biomes (Pantanal: 99.2%, Mata Atlântica: 85.5%)
+**`estavel` — Stable (right-censored)**
+- Definition: pixel is in the same class (N, P, A, U, or W) at the END of the series for ≥21 consecutive years — right-censored at 2024
+- Threshold: 21 consecutive years at end of series (>half of the 40-year series)
+- Ecological meaning: structurally consolidated land use — pixel reached 2024 in the same state, without any observed exit in the final 21+ years
+- Class T (mosaic) does not break the consecutive count but does not contribute to it
+- Methodologically consistent with P→P: stable pasture pixels were also right-censored observations that reached 2024 without transitioning
+- Important: pixels with 21+ total years in a class but NOT at the end of the series are NOT marked stable. This prevents falsely labeling pixels that converted from their dominant class.
+- Mean frequency: lower than 94.1% reported in v1 (which used total count, not consecutive terminal count)
 
 ---
 
