@@ -25,7 +25,8 @@ Most geospatial foundation models work on multispectral satellite imagery and le
 |**Cerrado Pilot**          |Multi-state survival model for pasture dynamics               |✅ Complete — [geofm-cerrado](https://github.com/barroso2501/geofm-cerrado-github)|
 |**Phase 1 — Sampling**     |Stratified extraction of 80 cells × 40 years across Brazil    |✅ Complete                                                                       |
 |**Phase 2A — Pre-training**|Masked temporal prediction — Transformer vs MLP baseline      |✅ Complete                                                                       |
-|**Phase 2B — Evaluation**  |Criteria 1, 3, 4 — latent space + few-shot + Cerrado benchmark|🔄 Partial                                                                        |
+|**Phase 2B — Evaluation**  |Criteria 1, 3, 4 — latent space + few-shot + Cerrado benchmark|✅ Complete                                                                       |
+|**Fine-tuning**            |GeoFM encoder + Weibull heads — end-to-end on Cerrado Pilot   |✅ Complete                                                                       |
 |**Phase 3 — Cross-biome**  |Leave-one-biome-out transfer evaluation + Criterion 4         |⬜ Planned                                                                        |
 
 -----
@@ -173,6 +174,18 @@ The Transformer achieved 2× lower loss and 6pp higher accuracy than the MLP bas
 
 Processes involving temporal oscillation (N↔P, W→N) show encoder disadvantage — the CLS token aggregates the entire series into one vector, losing the oscillation signal that raw features preserve. This is a known limitation of mean-pooling representations addressed in Phase 3.
 
+### Fine-tuning — GeoFM-FT
+
+End-to-end fine-tuning of the GeoFM encoder with Weibull survival heads (identical loss to etapa13b). Differentiated learning rates: encoder=1e-5, heads=1e-4.
+
+|Model                 |AUC P→S  |AUC P→N  |lam_S (yr)|lam_N (yr)|r(S,N)    |
+|----------------------|:-------:|:-------:|:--------:|:--------:|:--------:|
+|etapa13b (specialized)|0.854    |0.859    |25.91     |44.77     |-0.763    |
+|GeoFM linear probe    |0.830    |0.916    |—         |—         |—         |
+|**GeoFM fine-tuned**  |**0.865**|**0.876**|**24.16** |**43.64** |**-0.806**|
+
+**GeoFM fine-tuned exceeds etapa13b on both tasks** (+0.011 P→S, +0.017 P→N). Lambda values are physically calibrated (24.2 yr and 43.6 yr — close to etapa13b). The negative feedback r=-0.806 confirms mechanistic opposition between conversion and regeneration is preserved.
+
 ## Repository structure
 
 ```
@@ -213,10 +226,5 @@ OSF Updates 12, 12-Addendum, 13 document the full Phase 2 methodology and result
 ## License
 
 Data: CC-BY 4.0 | Code: MIT
-
----
-
-## License
-
 Data: CC-BY 4.0 | Code: MIT
 Data: CC-BY 4.0 | Code: MIT
